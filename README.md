@@ -25,6 +25,20 @@ composer install
 php artisan serve
 ```
 
+### Run tests
+
+For running the test, apply either of the following two commands:
+
+```console
+./vendor/bin/pest
+```
+
+```console
+php artisan test
+```
+
+note: tests made with pest.
+
 ## API Endpoint
 
 ### POST /api/waterjug
