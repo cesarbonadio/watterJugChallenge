@@ -1,66 +1,121 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Water Jug Challenge API  🪣🪣
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Overview
 
-## About Laravel
+This project provides an API to solve the classic Water Jug Challenge using PHP. The challenge involves two jugs with different capacities and the goal is to measure a specific amount of water using the minimum number of steps. The API calculates and returns the steps required to achieve the desired amount of water.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Installation
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+To run this project, you need to have the following installed:
+- PHP 8 or higher
+- Composer 2.6 or higher
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Steps to Install
 
-## Learning Laravel
+1. Clone the repository and cd to folder
+```console
+git clone https://github.com/cesarbonadio/watterJugChallenge.git && cd watterJugChallenge
+```
+2. Instal dependencies using composer
+```console
+composer install
+```
+3. Run server with artisan
+```console
+php artisan serve
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## API Endpoint
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### POST /api/waterjug
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+This endpoint accepts a JSON payload with the capacities of the two jugs and the desired amount of water. It returns a series of steps to achieve the desired amount.
 
-## Laravel Sponsors
+#### Request Body
+| Parameter    | Type | Description  |
+| ------------- |:-------------:| ------:|
+| x_capacity | int | Capacity of the first jug (bucket X) |
+| y_capacity | int | Capacity of the second jug (bucket Y) |
+| z_amount_wanted | int | Desired amount of water to be measured (Z) |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+##### Example:
+```json
+{
+    "x_capacity": 2,
+    "y_capacity": 10,
+    "z_amount_wanted": 4 
+}
+```
 
-### Premium Partners
+#### Response
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+The response is a JSON array of steps, where each step is an object containing the step number, the current state of the jugs, and the action taken. Each step have a structure like this:
 
-## Contributing
+| Field    | Type | Description  |
+| ------------- |:-------------:| ------:|
+| step | int | The step number |
+| bucketX | int | Current amount of water in bucket X |
+| bucketY | int | Current amount of water in bucket Y |
+| action | string | Description of the action performed |
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+##### Example:
+```json
+[
+    {
+        "step": 1,
+        "bucketX": 2,
+        "bucketY": 0,
+        "action": "Action: Fill bucket x"
+    },
+    {
+        "step": 2,
+        "bucketX": 0,
+        "bucketY": 2,
+        "action": "Action: Transfer from bucket x to bucket y"
+    },
+    {
+        "step": 3,
+        "bucketX": 2,
+        "bucketY": 2,
+        "action": "Action: Fill bucket x"
+    },
+    {
+        "step": 4,
+        "bucketX": 0,
+        "bucketY": 4,
+        "action": "Action: Transfer from bucket x to bucket y"
+    }
+]
+```
 
-## Code of Conduct
+## Algorithm Explanation
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+The Water Jug Challenge can be efficiently solved using the Breadth-First Search (BFS) algorithm. BFS is ideal for this problem because it explores all possible states level by level, ensuring that the solution is found using the minimum number of steps.
 
-## Security Vulnerabilities
+### BFS Algorithm Steps
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Initialize a queue with the initial state (0, 0) and mark it as visited.
+2. While the queue is not empty:
+    * Dequeue the front state and check if it matches the goal.
+    * Generate all possible next states by performing valid actions (fill, empty, transfer).
+    * Enqueue the new states and mark them as visited if they haven't been visited before.
+3. Return the sequence of actions leading to the goal state.
 
-## License
+## Visualization for Non-Technical Audience
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+To help non-technical individuals understand the process, here is an ASCII representation of the buckets during each step:
+```javascript
+Step 1: Fill bucket X
+X: [XX] Y: [          ]
+
+Step 2: Transfer from bucket X to bucket Y
+X: [  ] Y: [XX        ]
+
+Step 3: Fill bucket X
+X: [XX] Y: [XX        ]
+
+Step 4: Transfer from bucket X to bucket Y
+X: [  ] Y: [XXXX      ]
+```
+
+This visual representation shows how water is transferred between the two jugs step by step, making it easier to follow the process.
