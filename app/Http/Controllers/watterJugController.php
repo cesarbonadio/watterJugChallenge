@@ -15,12 +15,26 @@ class watterJugController extends Controller
 
     // the important compute function
     public function compute(watterJugRequest $request) {
-        return response()->json([
-            WatterJugService::compute(
+        try {
+            $service_response = (object)WatterJugService::compute(
                 $request->x_capacity,
                 $request->y_capacity,
                 $request->z_amount_wanted
-            )
-        ], 200);
+            );
+
+            return response()->json(
+                $service_response, 
+                $service_response->status_code
+            );
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An unexpected error occurred.',
+                'status_code' => 500,
+                'data' => [],
+                'metadata' => [
+                    'error' => $e->getMessage()
+                ]
+            ], 500);
+        }
     }
 }

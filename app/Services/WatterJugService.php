@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Util\ResponseFormater;
+
 /**
  * Class WatterJugService
  *
@@ -9,6 +11,9 @@ namespace App\Services;
  */
 class WatterJugService
 {
+    const ERROR_NO_SOLUTION_MESSAGE = 'No solution can be found';
+
+
      /**
      * Formats the action taken at each step of the water jug problem solution.
      *
@@ -17,7 +22,7 @@ class WatterJugService
      * @param string $action The description of the action taken.
      * @return array The formatted action.
      */
-    private static function formatAction($step, $state, $action) {
+    private static function formatAction($step, $state, $action): array {
         return [
             "step" => $step,
             "bucketX" => $state[0],
@@ -32,7 +37,7 @@ class WatterJugService
      * @param array $path The sequence of states leading to the solution.
      * @return array The list of formatted actions taken to reach the solution.
      */
-    private static function understandActions(array $path) {
+    private static function understandActions(array $path): array {
         $actions = [];
         for ($i = 0; $i < count($path); $i++) {
             $current = $path[$i];
@@ -40,17 +45,17 @@ class WatterJugService
                 $previous = $path[$i - 1];
                 // Determine the action
                 if ($current[0] > $previous[0] && $current[1] == $previous[1]) {
-                    $actions[] = self::formatAction($i, $current, "Action: Fill bucket x");
+                    $actions[] = self::formatAction($i, $current, "Fill bucket x");
                 } elseif ($current[1] > $previous[1] && $current[0] == $previous[0]) {
-                    $actions[] = self::formatAction($i, $current, "Action: Fill bucket y");
+                    $actions[] = self::formatAction($i, $current, "Fill bucket y");
                 } elseif ($current[0] < $previous[0] && $current[1] == $previous[1]) {
-                    $actions[] = self::formatAction($i, $current, "Action: Empty bucket x");
+                    $actions[] = self::formatAction($i, $current, "Empty bucket x");
                 } elseif ($current[1] < $previous[1] && $current[0] == $previous[0]) {
-                    $actions[] = self::formatAction($i, $current, "Action: Empty bucket y");
+                    $actions[] = self::formatAction($i, $current, "Empty bucket y");
                 } elseif ($current[0] > $previous[0] && $current[1] < $previous[1]) {
-                    $actions[] = self::formatAction($i, $current, "Action: Transfer from bucket y to bucket x");
+                    $actions[] = self::formatAction($i, $current, "Transfer from bucket y to bucket x");
                 } elseif ($current[1] > $previous[1] && $current[0] < $previous[0]) {
-                    $actions[] = self::formatAction($i, $current, "Action: Transfer from bucket x to bucket y");
+                    $actions[] = self::formatAction($i, $current, "Transfer from bucket x to bucket y");
                 }
             }
         }
@@ -65,7 +70,12 @@ class WatterJugService
      * @param int $target The target amount of water to measure.
      * @return array|string The sequence of actions to reach the target amount or "no solution" if it is not possible.
      */
-    private static function watterJugBFS(int $a, int $b, int $target) {
+    private static function waterJugBFS(
+        int $a,
+        int $b,
+        int $target
+    ): array 
+    {
         $visited = [];
         $parent = [];
 
@@ -127,7 +137,7 @@ class WatterJugService
             }
         }
 
-        return "no solution";
+        return self::ERROR_NO_SOLUTION_MESSAGE;
     }
 
     /**
@@ -144,10 +154,30 @@ class WatterJugService
         int $z_amount_wanted
     ): array
     {
-        return self::watterJugBFS(
-            $x_capacity, 
-            $y_capacity, 
-            $z_amount_wanted
+        // Validate input
+        if ($z_amount_wanted > $x_capacity && $z_amount_wanted > $y_capacity) {
+            return ResponseFormater::response(
+                'No solution possible. The amount wanted can\'t be greater than the capacity of both two jugs',
+                422
+            );
+        }
+
+        // Compute result
+        $computed_result = self::waterJugBFS($x_capacity, $y_capacity, $z_amount_wanted);
+
+        // Check if computation was successful
+        if ($computed_result === self::ERROR_NO_SOLUTION_MESSAGE) {
+            return ResponseFormater::response(
+                'No solution possible. Computationally, it was impossible to find the result for some reason',
+                422
+            );
+        }
+
+        return ResponseFormater::response(
+            'result found successfully',
+            200,
+            $computed_result,
+            ['number_of_steps' => count($computed_result)]
         );
     }
 }
