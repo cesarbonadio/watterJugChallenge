@@ -8,7 +8,7 @@ test('the application returns a successful response', function () {
     $response->assertStatus(200);
 });
 
-test('testing the correct steps returned (test correct case 1)', function () {
+test('testing the correct steps returned (test correct case 1) x=2;y=10;z=4', function () {
     $response = $this->post('/api/watterjug', [
         'x_capacity' => 2,
         'y_capacity' => 10,
@@ -43,7 +43,7 @@ test('testing the correct steps returned (test correct case 1)', function () {
     $response->assertStatus(200);
 });
 
-test('testing the correct steps returned (test correct case 2)', function () {
+test('testing the correct steps returned (test correct case 2) x=5;y=3;z=4', function () {
     $response = $this->post('/api/watterjug', [
         'x_capacity' => 5,
         'y_capacity' => 3,
@@ -81,7 +81,7 @@ test('testing the correct steps returned (test correct case 2)', function () {
 });
 
 
-test('testing not possible case', function () {
+test('testing not possible case (amount greater than the capacity of both two jug)', function () {
     $response = $this->post('/api/watterjug', [
         'x_capacity' => 35,
         'y_capacity' => 45,
@@ -94,5 +94,21 @@ test('testing not possible case', function () {
     expect(count($json_response['metadata']))->toBe(0);
     expect($json_response['message'])->toBe(
         'No solution possible. The amount wanted can\'t be greater than the capacity of both two jugs'
+    );
+});
+
+test('testing not possible case (not possible computationally)', function () {
+    $response = $this->post('/api/watterjug', [
+        'x_capacity' => 5,
+        'y_capacity' => 5,
+        'z_amount_wanted' => 4
+    ]);
+
+    $json_response = $response->json();
+
+    expect(count($json_response['data']))->toBe(0);
+    expect(count($json_response['metadata']))->toBe(0);
+    expect($json_response['message'])->toBe(
+        'No solution possible. Computationally, it was impossible to find the result for some reason'
     );
 });

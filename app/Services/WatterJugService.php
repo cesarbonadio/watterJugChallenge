@@ -70,11 +70,11 @@ class WatterJugService
      * @param int $target The target amount of water to measure.
      * @return array|string The sequence of actions to reach the target amount or "no solution" if it is not possible.
      */
-    private static function waterJugBFS(
+    public static function waterJugBFS(
         int $a,
         int $b,
         int $target
-    ): array 
+    ): array|string 
     {
         $visited = [];
         $parent = [];
