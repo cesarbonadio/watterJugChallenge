@@ -9,6 +9,7 @@ This project provides an API to solve the classic Water Jug Challenge using PHP.
 To run this project, you need to have the following installed:
 - PHP 8 or higher
 - Composer 2.6 or higher
+- Redis^7 database setted up and running or docker 23^
 
 ### Steps to Install
 
@@ -20,7 +21,32 @@ git clone https://github.com/cesarbonadio/watterJugChallenge.git && cd watterJug
 ```console
 composer install
 ```
-3. Run server with artisan
+3. create .env file
+```console
+cat .env.example > .env
+```
+or create .env manually and copy the content of .env.example
+
+4. Set your secret laravel key app
+```console
+php artisan key:generate
+```
+
+5. Set up your .env file
+
+For this project, just configure the redis client configuration, only this envs variables: REDIS_URL, REDIS_CLIENT
+
+In the .env.example I setted up the default that docker compose will create
+
+REDIS_URL=tcp://127.0.0.1:6379?database=0
+REDIS_CLIENT=predis
+
+6. Create redis container if you want to dockerize redis (if already installed ignore this step)
+```console
+docker compose up -d
+```
+
+7. Run server with artisan
 ```console
 php artisan serve
 ```
@@ -79,25 +105,25 @@ The response is a JSON array of steps, where each step is an object containing t
         "step": 1,
         "bucketX": 2,
         "bucketY": 0,
-        "action": "Action: Fill bucket x"
+        "action": "Fill bucket x"
     },
     {
         "step": 2,
         "bucketX": 0,
         "bucketY": 2,
-        "action": "Action: Transfer from bucket x to bucket y"
+        "action": "Transfer from bucket x to bucket y"
     },
     {
         "step": 3,
         "bucketX": 2,
         "bucketY": 2,
-        "action": "Action: Fill bucket x"
+        "action": "Fill bucket x"
     },
     {
         "step": 4,
         "bucketX": 0,
         "bucketY": 4,
-        "action": "Action: Transfer from bucket x to bucket y"
+        "action": "Transfer from bucket x to bucket y"
     }
 ]
 ```
