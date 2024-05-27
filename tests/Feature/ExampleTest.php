@@ -9,7 +9,7 @@ test('the application returns a successful response', function () {
 });
 
 test('testing the correct steps returned (test correct case 1) x=2;y=10;z=4', function () {
-    $response = $this->post('/api/watterjug', [
+    $response = $this->post('/api/waterjug', [
         'x_capacity' => 2,
         'y_capacity' => 10,
         'z_amount_wanted' => 4
@@ -44,7 +44,7 @@ test('testing the correct steps returned (test correct case 1) x=2;y=10;z=4', fu
 });
 
 test('testing the correct steps returned (test correct case 2) x=5;y=3;z=4', function () {
-    $response = $this->post('/api/watterjug', [
+    $response = $this->post('/api/waterjug', [
         'x_capacity' => 5,
         'y_capacity' => 3,
         'z_amount_wanted' => 4
@@ -82,7 +82,7 @@ test('testing the correct steps returned (test correct case 2) x=5;y=3;z=4', fun
 
 
 test('testing not possible case (amount greater than the capacity of both two jug)', function () {
-    $response = $this->post('/api/watterjug', [
+    $response = $this->post('/api/waterjug', [
         'x_capacity' => 35,
         'y_capacity' => 45,
         'z_amount_wanted' => 55
@@ -98,7 +98,7 @@ test('testing not possible case (amount greater than the capacity of both two ju
 });
 
 test('testing not possible case (not possible computationally)', function () {
-    $response = $this->post('/api/watterjug', [
+    $response = $this->post('/api/waterjug', [
         'x_capacity' => 5,
         'y_capacity' => 5,
         'z_amount_wanted' => 4

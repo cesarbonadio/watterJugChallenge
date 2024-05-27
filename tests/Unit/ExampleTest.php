@@ -1,13 +1,13 @@
 <?php
 
-use App\Services\WatterJugService;
+use App\Services\WaterJugService;
 
 test('that true is true', function () {
     expect(true)->toBeTrue();
 });
 
 test('unit-testing the correct steps returned (test correct case 1) x=2;y=10;z=4', function () {
-    $result = WatterJugService::waterJugBFS(
+    $result = WaterJugService::waterJugBFS(
         2, // x_capacity
         10, // y_capacity
         4 // z_amount_wanted
@@ -33,7 +33,7 @@ test('unit-testing the correct steps returned (test correct case 1) x=2;y=10;z=4
 });
 
 test('unit-testing the correct steps returned (test correct case 2) x=2;y=100;z=96', function () {
-    $result = WatterJugService::waterJugBFS(
+    $result = WaterJugService::waterJugBFS(
         2, // x_capacity
         100, // y_capacity
         96 // z_amount_wanted
@@ -59,21 +59,21 @@ test('unit-testing the correct steps returned (test correct case 2) x=2;y=100;z=
 });
 
 test('unit-testing not possible case (not possible computationally)', function () {
-    $result = WatterJugService::waterJugBFS(
+    $result = WaterJugService::waterJugBFS(
         5, // x_capacity
         5, // y_capacity
         4 // z_amount_wanted
     );
     expect($result)->toBeString();
-    expect($result)->toBe(WatterJugService::ERROR_NO_SOLUTION_MESSAGE);
+    expect($result)->toBe(WaterJugService::ERROR_NO_SOLUTION_MESSAGE);
 });
 
 test('unit-testing not possible case (amount greater than the capacity of both two jug)', function () {
-    $result = WatterJugService::waterJugBFS(
+    $result = WaterJugService::waterJugBFS(
         5, // x_capacity
         5, // y_capacity
         10 // z_amount_wanted
     );
     expect($result)->toBeString();
-    expect($result)->toBe(WatterJugService::ERROR_NO_SOLUTION_MESSAGE);
+    expect($result)->toBe(WaterJugService::ERROR_NO_SOLUTION_MESSAGE);
 });

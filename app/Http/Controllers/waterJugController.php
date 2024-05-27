@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\watterJugRequest;
-use App\Services\WatterJugService;
+use App\Http\Requests\waterJugRequest;
+use App\Services\WaterJugService;
 use Illuminate\Support\Facades\Redis;
 
-class watterJugController extends Controller
+class waterJugController extends Controller
 {
     // just a health check function
     public function index() {
@@ -15,7 +15,7 @@ class watterJugController extends Controller
     }
 
     // the important compute function
-    public function compute(watterJugRequest $request) {
+    public function compute(waterJugRequest $request) {
         try {
             $redis_key = "{$request->x_capacity},{$request->y_capacity},{$request->z_amount_wanted}";
 
@@ -29,7 +29,7 @@ class watterJugController extends Controller
                 );
             }
 
-            $service_response = (object)WatterJugService::compute(
+            $service_response = (object)WaterJugService::compute(
                 $request->x_capacity,
                 $request->y_capacity,
                 $request->z_amount_wanted

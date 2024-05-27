@@ -5,11 +5,11 @@ namespace App\Services;
 use App\Util\ResponseFormater;
 
 /**
- * Class WatterJugService
+ * Class WaterJugService
  *
  * This service provides methods to solve the water jug problem using the Breadth-First Search (BFS) algorithm.
  */
-class WatterJugService
+class WaterJugService
 {
     const ERROR_NO_SOLUTION_MESSAGE = 'No solution can be found';
 

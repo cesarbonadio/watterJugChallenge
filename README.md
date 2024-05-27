@@ -15,7 +15,7 @@ To run this project, you need to have the following installed:
 
 1. Clone the repository and cd to folder
 ```console
-git clone https://github.com/cesarbonadio/watterJugChallenge.git && cd watterJugChallenge
+git clone https://github.com/cesarbonadio/waterJugChallenge.git && cd waterJugChallenge
 ```
 2. Instal dependencies using composer
 ```console
